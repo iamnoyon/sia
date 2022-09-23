@@ -1,37 +1,37 @@
 from mbackend.core.fetcher import Fetcher
 from mbackend.core.application import Application
-from monseigneur.modules.public.sia.alchemy.dao_manager import DaoManager
-from monseigneur.modules.public.sia.alchemy.tables import Article
+from monseigneur.modules.public.lequipe.alchemy.dao_manager import DaoManager
+from monseigneur.modules.public.lequipe.alchemy.tables import Article
 import time
 
 
-class SiaBackend(Application):
+class LequipeBackend(Application):
 
-    APPNAME = "Application Sia"
+    APPNAME = "Application Lequipe"
     VERSION = '1.0'
     COPYRIGHT = 'Copyright(C) 2012-YEAR LOBSTR'
-    DESCRIPTION = "Scraping Backend for Sia"
-    SHORT_DESCRIPTION = "Sia Scraping"
+    DESCRIPTION = "Scraping Backend for Lequipe"
+    SHORT_DESCRIPTION = "Step-by-step Example of Lequipe Scraping"
 
     def __init__(self):
-        super(SiaBackend, self).__init__(self.APPNAME)
+        super(LequipeBackend, self).__init__(self.APPNAME)
         self.setup_logging()
-        self.fetcher = Fetcher()
-        self.module = self.fetcher.build_backend("sia", params={})
+        self.fetcher = Fetcher(is_public=True)
+        self.module = self.fetcher.build_backend("lequipe", params={})
 
-        self.dao = DaoManager("sia")
+        self.dao = DaoManager("lequipe")
         self.session, self.scoped_session = self.dao.get_shared_session()
 
     def main(self):
         for page in range(1, 5):
-            articles = self.module.iter_articles(page=page)
-            for article in articles:
-                print(article.__dict__)
+            members = self.module.iter_members(page=1)
+            for member in members:
+                print(member.__dict__)
                 if not self.session.query(Article).filter(Article.internal_id == article.internal_id).count():
                     self.session.add(article)
                     self.session.commit()
 
 
 if __name__ == '__main__':
-    my = SiaBackend()
+    my = LequipeBackend()
     my.main()

@@ -3,16 +3,16 @@
 # Copyright(C) 2018 Sasha Bouloudnine
 
 from monseigneur.core.tools.backend import Module
-from .browser import LequipeBrowser
+from .browser import SiaBrowser
 
-__all__ = ['LequipeModule']
+__all__ = ['SiaModule']
 
 
-class LequipeModule(Module):
-    NAME = 'Lequipe'
+class SiaModule(Module):
+    NAME = 'sia'
     MAINTAINER = u'Jamal'
     EMAIL = '{first}.{last}@lobstr.io'
-    BROWSER = LequipeBrowser
+    BROWSER = SiaBrowser
 
-    def iter_articles(self, page):
-        return self.browser.iter_articles(page)
+    def iter_members(self, memberlist_page_no):
+        return self.browser.iter_members(memberlist_page_no)
