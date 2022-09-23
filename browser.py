@@ -5,10 +5,10 @@
 from monseigneur.core.browser import PagesBrowser, URL
 from .pages import MemberListPage, MemberPage, OfficeListPage, OfficePage
 
-__all__ = ['LequipeBrowser']
+__all__ = ['SiaBrowser']
 
 
-class LequipeBrowser(PagesBrowser):
+class SiaBrowser(PagesBrowser):
 
     BASEURL = 'https://www.sia.ch/'
 
@@ -21,7 +21,7 @@ class LequipeBrowser(PagesBrowser):
     office_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-bureaux/m/(?P<office_id>\d+)", OfficePage)
 
     def __init__(self, *args, **kwargs):
-        super(LequipeBrowser, self).__init__(*args, **kwargs)
+        super(SiaBrowser, self).__init__(*args, **kwargs)
 
     def iter_members(self, memberlist_page):
         self.member_list_page.go(page=memberlist_page)

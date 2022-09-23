@@ -1,3 +1,3 @@
-from .module import LequipeModule
+from .module import SiaModule
 
-__all__ = ['LequipeModule']
+__all__ = ['SiaModule']
