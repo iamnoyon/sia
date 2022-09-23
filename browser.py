@@ -13,7 +13,7 @@ class SiaBrowser(PagesBrowser):
 
     BASEURL = 'https://www.sia.ch/'
 
-    memberlist_page= URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-individuels/nc/1/\?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<memberlist_page_no>\d+/)", MemberListPage)
+    memberlist_page= URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-individuels/nc/1/\?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<memberlist_page_no>\d+)", MemberListPage)
 
     member_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-individuels/m/(?P<member_id>\d+)", MemberPage)
 

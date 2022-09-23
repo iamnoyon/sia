@@ -36,8 +36,9 @@ class MemberListPage(HTMLPage):
         class get_members(ItemElement):
             klass = Members
             def obj_zipcode(self):
-                return self.el.xpath('/td[4]')
+                return self.el.xpath('//td[4]/text()')
             def obj_language(self):
+                print(self.obj_zipcode())
                 if (self.page.browser.df['ZIP_CODE'].eq(int(self.obj_zipcode()))).any():
                     lang = self.page.browser.df.loc[self.page.browser.df['ZIP_CODE'] == int(self.obj_zipcode())].LANGUAGE.item() #get lang by comparing zip with excel
                 else:
