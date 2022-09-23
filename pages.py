@@ -29,8 +29,8 @@ class ListPage(HTMLPage):
                 self.doc = content
                 return self.doc
 
-@method
 class MemberListPage(HTMLPage):
+    @method
     class iter_members(ListElement):
         item_xpath = "//table//tr"
         class get_members(ItemElement):
