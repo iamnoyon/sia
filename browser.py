@@ -27,7 +27,7 @@ class SiaBrowser(PagesBrowser):
         super(SiaBrowser, self).__init__(*args, **kwargs)
 
     def iter_members(self, memberlist_page_no):
-        self.memberlist_page.go(page=memberlist_page_no)
+        self.memberlist_page.go(memberlist_page_no=memberlist_page_no)
         assert self.memberlist_page.is_here()
         return self.page.iter_members()
 
@@ -39,7 +39,7 @@ class SiaBrowser(PagesBrowser):
         return self.page.iter_members()
 
     def iter_offices(self, office_list_page_no):
-        self.office_list_page.go(page=office_list_page_no)
+        self.office_list_page.go(office_list_page_no=office_list_page_no)
         assert self.office_list_page.is_here()
         return self.page.iter_members()
 
