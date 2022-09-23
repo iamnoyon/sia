@@ -13,11 +13,11 @@ class SiaBrowser(PagesBrowser):
 
     BASEURL = 'https://www.sia.ch/'
 
-    member_list_page = URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-individuels/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<memberlist_page>\d+)", MemberListPage)
+    memberlist_page= URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-individuels/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<memberlist_page_no>\d+)", MemberListPage)
 
     member_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-individuels/m/(?P<member_id>\d+)", MemberPage)
 
-    office_list_page = URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-bureaux/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<officelist_page>\d+)", OfficeListPage)
+    office_list_page = URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-bureaux/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<office_list_page_no>\d+)", OfficeListPage)
 
     office_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-bureaux/m/(?P<office_id>\d+)", OfficePage)
 
@@ -26,9 +26,9 @@ class SiaBrowser(PagesBrowser):
         self.df = pd.read_excel(zip_lang)
         super(SiaBrowser, self).__init__(*args, **kwargs)
 
-    def iter_members(self, memberlist_page):
-        self.member_list_page.go(page=memberlist_page)
-        assert self.member_list_page.is_here()
+    def iter_members(self, memberlist_page_no):
+        self.memberlist_page.go(page=memberlist_page_no)
+        assert self.memberlist_page.is_here()
         return self.page.iter_members()
 
     def iter_members_details(self, member_id):
@@ -38,8 +38,8 @@ class SiaBrowser(PagesBrowser):
         assert self.member_page.is_here()
         return self.page.iter_members()
 
-    def iter_offices(self, office_list_page):
-        self.office_list_page.go(page=office_list_page)
+    def iter_offices(self, office_list_page_no):
+        self.office_list_page.go(page=office_list_page_no)
         assert self.office_list_page.is_here()
         return self.page.iter_members()
 
