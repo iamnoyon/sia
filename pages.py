@@ -33,15 +33,16 @@ class ListPage(HTMLPage):
 class MemberListPage(HTMLPage):
     item_xpath = "//table//tr"
     class iter_members(ListElement):
-        klass = Members
-        def obj_zipcode(self):
-            return self.el.xpath('/td[4]')
-        def obj_language(self):
-            if (self.page.browser.df['ZIP_CODE'].eq(int(self.obj_zipcode()))).any():
-                lang = self.page.browser.df.loc[self.page.browser.df['ZIP_CODE'] == int(self.obj_zipcode())].LANGUAGE.item() #get lang by comparing zip with excel
-            else:
-                lang = 'FR'
-            return lang
+        class get_member(ItemElement):
+            klass = Members
+            def obj_zipcode(self):
+                return self.el.xpath('/td[4]')
+            def obj_language(self):
+                if (self.page.browser.df['ZIP_CODE'].eq(int(self.obj_zipcode()))).any():
+                    lang = self.page.browser.df.loc[self.page.browser.df['ZIP_CODE'] == int(self.obj_zipcode())].LANGUAGE.item() #get lang by comparing zip with excel
+                else:
+                    lang = 'FR'
+                return lang
 
 def pad(data, ks):
             pad_len = (ks - (len(data) % ks)) % ks 
