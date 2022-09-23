@@ -4,6 +4,7 @@
 
 from monseigneur.core.browser import PagesBrowser, URL
 from .pages import MemberListPage, MemberPage, OfficeListPage, OfficePage
+import pandas as pd
 
 __all__ = ['SiaBrowser']
 
@@ -21,6 +22,8 @@ class SiaBrowser(PagesBrowser):
     office_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-bureaux/m/(?P<office_id>\d+)", OfficePage)
 
     def __init__(self, *args, **kwargs):
+        zip_lang = 'zip_language.xlsx'
+        self.df = pd.read_excel(zip_lang)
         super(SiaBrowser, self).__init__(*args, **kwargs)
 
     def iter_members(self, memberlist_page):

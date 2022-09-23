@@ -37,13 +37,32 @@ class MemberListPage(HTMLPage):
         def obj_zipcode(self):
             return self.el.xpath('/td[4]')
 
+def pad(data, ks):
+            pad_len = (ks - (len(data) % ks)) % ks 
+            return data + (b'\x00' * pad_len)
+
+def kdf(pwd, keySize): 
+    if keySize != 16 and keySize != 24 and keySize != 32:
+        raise ValueError("Wrong keysize") 
+    keyPadded = pwd[:keySize] if len(pwd) >= keySize else pad(pwd, keySize)
+    aes = AES.new(key=keyPadded, mode=AES.MODE_ECB) 
+    key = aes.encrypt(keyPadded[:16])
+    if keySize > 16:
+        key = (key + key)[:keySize]
+    return key
+
 class MemberPage(HTMLPage):
     class iter_members_details(ItemElement):
         klass = Members
         def obj_url(self):
-            pass
+            return self.page.url
         def obj_language(self):
-            pass
+            
+            if (self.page.browser.df['ZIP_CODE'].eq(int(self.el.xpath('/td[4]')))).any():
+                lang = self.page.browser.df.loc[self.page.browser.df['ZIP_CODE'] == int(self.el.xpath('/td[4]'))].LANGUAGE.item() #get lang by comparing zip with excel
+            else:
+                lang = 'FR'
+            return lang
         def obj_full_address(self):
             return self.el.xpath('//table//tr[2]/td/text()')
         def obj_gender(self):
@@ -56,20 +75,6 @@ class MemberPage(HTMLPage):
             return self.el.xpath('//table//tr[2]/td/font[4]/font/text()')[0]
         def obj_city(self):
              return self.el.xpath('//table//tr[2]/td/font[5]/font/text()')[0]
-
-        def pad(data, ks):
-            pad_len = (ks - (len(data) % ks)) % ks 
-            return data + (b'\x00' * pad_len)
-
-        def kdf(pwd, keySize): 
-            if keySize != 16 and keySize != 24 and keySize != 32:
-                raise ValueError("Wrong keysize") 
-            keyPadded = pwd[:keySize] if len(pwd) >= keySize else pad(pwd, keySize)
-            aes = AES.new(key=keyPadded, mode=AES.MODE_ECB) 
-            key = aes.encrypt(keyPadded[:16])
-            if keySize > 16:
-                key = (key + key)[:keySize]
-            return key
 
         def get_decryption(self):
             data_contact = self.el.xpath('//@data-contact')
@@ -117,16 +122,18 @@ class MemberPage(HTMLPage):
             return email, tel, fax, website
 
         def obj_email(self):
-            return self.get_decryption()[0]
+            email, tel, fax, website = self.get_decryption()
+            return email
         def obj_tel(self):
-            #decreption
-            pass
+            email, tel, fax, website = self.get_decryption()
+            return email
         def obj_fax(self):
-            #decreption
-            pass
+            email, tel, fax, website = self.get_decryption()
+            return fax
         def obj_website(self):
-            #decreption
-            pass
+            email, tel, fax, website = self.get_decryption()
+            return website
+
         def obj_job(self):
             return self.el.xpath('//table//tr[6]/td[2]//text()')[0]
         def obj_sector(self):
