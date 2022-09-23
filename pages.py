@@ -31,9 +31,9 @@ class ListPage(HTMLPage):
 
 @method
 class MemberListPage(HTMLPage):
-    item_xpath = "//table//tr"
     class iter_members(ListElement):
-        class get_member(ItemElement):
+        item_xpath = "//table//tr"
+        class get_members(ItemElement):
             klass = Members
             def obj_zipcode(self):
                 return self.el.xpath('/td[4]')
