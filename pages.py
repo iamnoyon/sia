@@ -32,11 +32,11 @@ class ListPage(HTMLPage):
 class MemberListPage(HTMLPage):
     @method
     class iter_members(ListElement):
-        item_xpath = "//table//tr"
+        item_xpath = '//table//tr[not(contains(@class,"header"))]'
         class get_members(ItemElement):
             klass = Members
             def obj_zipcode(self):
-                return self.el.xpath('//td[4]/text()')
+                return self.xpath('./td[4]/text()')[0]
             def obj_language(self):
                 print(self.obj_zipcode())
                 if (self.page.browser.df['ZIP_CODE'].eq(int(self.obj_zipcode()))).any():
