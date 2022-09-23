@@ -5,6 +5,9 @@ from monseigneur.core.browser.filters.html import Link, AbsoluteLink
 from monseigneur.core.browser.filters.json import Dict
 from monseigneur.core.browser.filters.standard import CleanText, Regexp, CleanDecimal, Currency, DateTime, Env, Field, Currency as CleanCurrency, CleanDate
 from alchemy.tables import Members
+from Crypto.Cipher import AES
+from base64 import b64decode
+import re
 
 import json
 
@@ -53,9 +56,68 @@ class MemberPage(HTMLPage):
             return self.el.xpath('//table//tr[2]/td/font[4]/font/text()')[0]
         def obj_city(self):
              return self.el.xpath('//table//tr[2]/td/font[5]/font/text()')[0]
+
+        def pad(data, ks):
+            pad_len = (ks - (len(data) % ks)) % ks 
+            return data + (b'\x00' * pad_len)
+
+        def kdf(pwd, keySize): 
+            if keySize != 16 and keySize != 24 and keySize != 32:
+                raise ValueError("Wrong keysize") 
+            keyPadded = pwd[:keySize] if len(pwd) >= keySize else pad(pwd, keySize)
+            aes = AES.new(key=keyPadded, mode=AES.MODE_ECB) 
+            key = aes.encrypt(keyPadded[:16])
+            if keySize > 16:
+                key = (key + key)[:keySize]
+            return key
+
+        def get_decryption(self):
+            data_contact = self.el.xpath('//@data-contact')
+            if data_contact:
+                data_contact=data_contact[0]
+            else:
+                data_contact=''
+            data_secret = self.el.xpath('//@data-secr')
+            if data_secret:
+                data_secret=data_secret[0]
+            else:
+                data_secret = ''
+            ciphertext = b64decode(data_contact)
+            nc = ciphertext[:8]
+            data = ciphertext[8:]
+
+            keySize = 32
+            pwd = data_secret #from data-secr
+            key = kdf(pwd.encode('utf-8'), keySize) 
+            aes = AES.new(key=key, mode=AES.MODE_CTR, nonce=nc) 
+            res = aes.decrypt(data)
+            result = res.decode('utf-8')
+            #tel = result[0:13]
+            email = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', result)
+            if email:
+                email = email[0]
+            else:
+                email=''
+            phone_fax=re.findall(r"(\+\d\d\s*\d(?:\d)+)",result)
+            if phone_fax and len(phone_fax)==2:
+                tel = phone_fax[0]
+                fax = phone_fax[1]
+            elif phone_fax and len(phone_fax)==1:
+                tel = phone_fax[0]
+                fax = ''
+            else:
+                tel = ''
+                fax = ''
+            website = re.search('_blank">(.*)</a><br />', result)
+            if website:
+                website = website.group(1)
+            else:
+                website=''
+
+            return email, tel, fax, website
+
         def obj_email(self):
-            #decreption
-            pass
+            return self.get_decryption()[0]
         def obj_tel(self):
             #decreption
             pass
