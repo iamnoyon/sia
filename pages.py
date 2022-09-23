@@ -35,14 +35,19 @@ class MemberListPage(HTMLPage):
         item_xpath = '//table//tr[not(contains(@class,"header"))]'
         class get_members(ItemElement):
             klass = Members
+            def obj_url(self):
+                #return self.page.url
+                #member_id = re.findall(r'(\d+)', indv_url)[0]
+                return 'https://www.sia.ch'+(self.xpath('./td[1]/a/@href')[0])
             def obj_zipcode(self):
                 zip = self.xpath('./td[4]/text()')
                 if zip:
                     return zip[0]
                 else:
                     return
+
             def obj_language(self):
-                print(self.obj_zipcode())
+                #print(self.obj_zipcode())
                 if self.obj_zipcode():
                     if (self.page.browser.df['ZIP_CODE'].eq(int(self.obj_zipcode()))).any():
                         lang = self.page.browser.df.loc[self.page.browser.df['ZIP_CODE'] == int(self.obj_zipcode())].LANGUAGE.item() #get lang by comparing zip with excel
@@ -69,8 +74,6 @@ def kdf(pwd, keySize):
 class MemberPage(HTMLPage):
     class members_details(ItemElement):
         klass = Members
-        def obj_url(self):
-            return self.page.url
         def obj_full_address(self):
             return self.el.xpath('//table//tr[2]/td/text()')
         def obj_gender(self):

@@ -31,7 +31,7 @@ class SiaBrowser(PagesBrowser):
         assert self.memberlist_page.is_here()
         return self.page.iter_members()
 
-    def iter_members_details(self, member_id):
+    def iter_members_details(self, lang, member_id):
         zip = self.page.get_zip()
         lang= self.page.get_lang(zip)
         self.member_page.go(lang=lang, member_id = member_id)

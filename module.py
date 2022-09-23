@@ -16,3 +16,5 @@ class SiaModule(Module):
 
     def iter_members(self, memberlist_page_no):
         return self.browser.iter_members(memberlist_page_no)
+    def iter_members_details(self, lang, member_id):
+        return self.browser.iter_members(lang, member_id)
