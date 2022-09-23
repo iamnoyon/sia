@@ -23,13 +23,9 @@ class LequipeBackend(Application):
         self.session, self.scoped_session = self.dao.get_shared_session()
 
     def main(self):
-        for page in range(1, 5):
-            members = self.module.iter_members(page=1)
-            for member in members:
-                print(member.__dict__)
-                if not self.session.query(Article).filter(Article.internal_id == article.internal_id).count():
-                    self.session.add(article)
-                    self.session.commit()
+        members = self.module.iter_members(page=1)
+        for member in members:
+            print(member.__dict__)
 
 
 if __name__ == '__main__':
