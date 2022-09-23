@@ -1,25 +1,25 @@
 from mbackend.core.fetcher import Fetcher
 from mbackend.core.application import Application
-from monseigneur.modules.public.lequipe.alchemy.dao_manager import DaoManager
-from monseigneur.modules.public.lequipe.alchemy.tables import Article
+from monseigneur.modules.public.sia.alchemy.dao_manager import DaoManager
+from monseigneur.modules.public.sia.alchemy.tables import Members
 import time
 
 
-class LequipeBackend(Application):
+class SiaBackend(Application):
 
-    APPNAME = "Application Lequipe"
+    APPNAME = "Application Sia"
     VERSION = '1.0'
     COPYRIGHT = 'Copyright(C) 2012-YEAR LOBSTR'
-    DESCRIPTION = "Scraping Backend for Lequipe"
-    SHORT_DESCRIPTION = "Step-by-step Example of Lequipe Scraping"
+    DESCRIPTION = "Scraping Backend for Sia.ch"
+    SHORT_DESCRIPTION = "Sia Scraping"
 
     def __init__(self):
-        super(LequipeBackend, self).__init__(self.APPNAME)
+        super(SiaBackend, self).__init__(self.APPNAME)
         self.setup_logging()
-        self.fetcher = Fetcher(is_public=True)
-        self.module = self.fetcher.build_backend("lequipe", params={})
+        self.fetcher = Fetcher()
+        self.module = self.fetcher.build_backend("sia", params={})
 
-        self.dao = DaoManager("lequipe")
+        self.dao = DaoManager("sia")
         self.session, self.scoped_session = self.dao.get_shared_session()
 
     def main(self):
@@ -29,5 +29,5 @@ class LequipeBackend(Application):
 
 
 if __name__ == '__main__':
-    my = LequipeBackend()
+    my = SiaBackend()
     my.main()
