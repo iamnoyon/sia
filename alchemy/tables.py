@@ -11,7 +11,7 @@ class Members(Base):
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    member_id = Column(Integer, ForeignKey("member-office.member_id"))
+    member_id = Column(Integer, ForeignKey("memberoffice.member_id"))
     #internal_id = Column(INTEGER, unique=True, nullable=False)
     url = Column(VARCHAR(350))
     language = Column(VARCHAR(2))
@@ -38,7 +38,7 @@ class Offices(Base):
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    office_id = Column(Integer, ForeignKey("member-office.office-_id"))
+    office_id = Column(Integer, ForeignKey("memberoffice.officeid"))
     #internal_id = Column(INTEGER, unique=True, nullable=False)
     url = Column(VARCHAR(350))
     language = Column(VARCHAR(2))
@@ -56,12 +56,12 @@ class Offices(Base):
 
 class MemberOffice(Base):
 
-    __tablename__ = 'member-office'
+    __tablename__ = 'memberoffice'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
     member_id = Column(INTEGER, unique=True, nullable=True)
-    office_id = Column(INTEGER, unique=True, nullable=True)
+    officeid = Column(INTEGER, unique=True, nullable=True)
     created_date = Column(DATETIME)
     #child = relationship("Child", backref="parents")
 def create_all(engine):

@@ -23,7 +23,7 @@ class SiaBackend(Application):
         self.session, self.scoped_session = self.dao.get_shared_session()
 
     def main(self):
-        members = self.module.iter_members(page=1)
+        members = self.module.iter_members(memberlist_page_no=1)
         for member in members:
             print(member.__dict__)
 

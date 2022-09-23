@@ -4,7 +4,7 @@ from monseigneur.core.browser.elements import ItemElement, ListElement, method, 
 from monseigneur.core.browser.filters.html import Link, AbsoluteLink
 from monseigneur.core.browser.filters.json import Dict
 from monseigneur.core.browser.filters.standard import CleanText, Regexp, CleanDecimal, Currency, DateTime, Env, Field, Currency as CleanCurrency, CleanDate
-from alchemy.tables import Members
+from monseigneur.modules.public.sia.alchemy.tables import Members
 from Crypto.Cipher import AES
 from base64 import b64decode
 import re
