@@ -26,10 +26,10 @@ class SiaBackend(Application):
         for memberlist_page_no in range(1):
             members = self.module.iter_members(memberlist_page_no=memberlist_page_no)
             for member in members:
-                print(member.__dict__)
+                #print(member.__dict__)
                 #print(member.url)
                 memberdetails = self.module.members_details(member=member)
-                print("helooooooo:", memberdetails.__dict__)
+                print(memberdetails.__dict__)
         print('---------------------------------------------')
         for offices_list_page_no in range(1):
             offices = self.module.iter_offices(offices_list_page_no=offices_list_page_no)

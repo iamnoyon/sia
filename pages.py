@@ -84,22 +84,41 @@ class MemberPage(HTMLPage):
         klass = Members
         def obj_full_address(self):
             #print('Full address:', clean_list(self.xpath('//table//tr[2]/td/text()')))
-            return clean_list(self.xpath('//table//tr[2]/td/text()'))
+            full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
+            while(len(full_address)<5):
+                        full_address.append('')
+            full_address_str = " ".join(full_address)
+            return full_address_str
         def obj_gender(self):
             #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[0])
-            return clean_list(self.xpath('//table//tr[2]/td/text()'))[0]
+            full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
+            while(len(full_address)<5):
+                        full_address.append('')
+            return full_address[0]
         def obj_name(self):
             #print('Name:', clean_list(self.xpath('//table//tr[2]/td/text()'))[1])
-            return clean_list(self.xpath('//table//tr[2]/td/text()'))[1]
+            full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
+            while(len(full_address)<5):
+                        full_address.append('')
+            return full_address[1]
         def obj_education(self):
             #print('Education:', clean_list(self.xpath('//table//tr[2]/td/text()'))[2])
-            return clean_list(self.xpath('//table//tr[2]/td/text()'))[2]
+            full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
+            while(len(full_address)<5):
+                        full_address.append('')
+            return full_address[2]
         def obj_address(self):
             #print('Address:', clean_list(self.xpath('//table//tr[2]/td/text()'))[3])
-            return clean_list(self.xpath('//table//tr[2]/td/text()'))[3]
+            full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
+            while(len(full_address)<5):
+                        full_address.append('')
+            return full_address[3]
         def obj_city(self):
             #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[4])
-            return clean_list(self.xpath('//table//tr[2]/td/text()'))[4]
+            full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
+            while(len(full_address)<5):
+                        full_address.append('')
+            return full_address[4]
 
         def get_decryption(self):
             data_contact = self.xpath('//@data-contact')
@@ -160,13 +179,31 @@ class MemberPage(HTMLPage):
             return website
 
         def obj_job(self):
-            return self.xpath('//table//tr[6]/td[2]//text()')[0]
+            job = self.xpath('//table//tr[6]/td[2]//text()')
+            if job:
+                return clean_list(job)[0]
+            else:
+                return
         def obj_sector(self):
-            return self.xpath('//table//tr[7]/td[2]//text()')[0]
+            sector = self.xpath('//table//tr[7]/td[2]//text()')
+            if sector:
+                sector = clean_list(sector)
+                sector_str = ", ".join(sector)
+                return sector_str
+            else:
+                return
         def obj_group(self):
-            return self.xpath('//table//tr[8]/td[2]//text()')[0]
+            group = self.xpath('//table//tr[8]/td[2]//text()')
+            if group:
+                return clean_list(group)[0]
+            else:
+                return
         def obj_section(self):
-            return self.xpath('//table//tr[9]/td[2]//text()')[0]
+            section = self.xpath('//table//tr[9]/td[2]//text()')
+            if section:
+                return clean_list(section)[0]
+            else:
+                return
             
 
 
