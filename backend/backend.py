@@ -30,7 +30,7 @@ class SiaBackend(Application):
                 
                 #print(member.url)
                 memberdetails = self.module.members_details(language=member.language, url=member.url)
-                print(memberdetails.__dict__)
+                print("helooooooo:", memberdetails)
         print('---------------------------------------------')
         for offices_list_page_no in range(2):
             offices = self.module.iter_offices(offices_list_page_no=offices_list_page_no)
