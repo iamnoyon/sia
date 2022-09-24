@@ -71,21 +71,35 @@ def kdf(pwd, keySize):
         key = (key + key)[:keySize]
     return key
 
+def clean_list(list2clean):
+    clean_list = []
+    #clean full address
+    for element in list2clean:
+        clean_list.append(element.strip())
+    return list(filter(lambda e: e != '', clean_list))
+
 class MemberPage(HTMLPage):
+    @method
     class get_members_details(ItemElement):
         klass = Members
         def obj_full_address(self):
-            return self.xpath('//table//tr[2]/td/text()')
+            #print('Full address:', clean_list(self.xpath('//table//tr[2]/td/text()')))
+            return clean_list(self.xpath('//table//tr[2]/td/text()'))
         def obj_gender(self):
-            return self.xpath('//table//tr[2]/td/font[1]/font/text()')[0]
+            #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[0])
+            return clean_list(self.xpath('//table//tr[2]/td/text()')[0])
         def obj_name(self):
-            return self.xpath('//table//tr[2]/td/font[2]/font/text()')[0]
+            #print('Name:', clean_list(self.xpath('//table//tr[2]/td/text()'))[1])
+            return clean_list(self.xpath('//table//tr[2]/td/text()')[1])
         def obj_education(self):
-            return self.xpath('//table//tr[2]/td/font[3]/font/text()')
+            #print('Education:', clean_list(self.xpath('//table//tr[2]/td/text()'))[2])
+            return clean_list(self.xpath('//table//tr[2]/td/text()')[2])
         def obj_address(self):
-            return self.xpath('//table//tr[2]/td/font[4]/font/text()')[0]
+            #print('Address:', clean_list(self.xpath('//table//tr[2]/td/text()'))[3])
+            return clean_list(self.xpath('//table//tr[2]/td/text()')[3])
         def obj_city(self):
-            return self.xpath('//table//tr[2]/td/font[5]/font/text()')[0]
+            #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[4])
+            return clean_list(self.xpath('//table//tr[2]/td/text()')[4])
 
         def get_decryption(self):
             data_contact = self.xpath('//@data-contact')
@@ -185,6 +199,7 @@ class OfficeListPage(HTMLPage):
                 return lang
 
 class OfficePage(HTMLPage):
+    @method
     class get_offices_details(ItemElement):
         klass = Offices
         def obj_full_address(self):
