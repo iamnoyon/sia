@@ -139,7 +139,7 @@ class MemberPage(HTMLPage):
                 return email
             def obj_tel(self):
                 email, tel, fax, website = self.get_decryption()
-                return email
+                return tel
             def obj_fax(self):
                 email, tel, fax, website = self.get_decryption()
                 return fax
@@ -192,21 +192,71 @@ class OfficePage(HTMLPage):
         class get_offices_details(ItemElement):
             klass = Offices
             def obj_full_address(self):
-                pass
+                return self.xpath('//table//tr[2]/td/text()')
             def obj_name(self):
-                pass
+                return self.xpath('//table//tr[2]/td[1]/text()')[1]
             def obj_address(self):
-                pass
+                return self.xpath('//table//tr[2]/td[1]/text()')[2]
             def obj_city(self):
-                pass
+                return self.xpath('//table//tr[2]/td[1]/text()')[3]
+
+            def get_decryption(self):
+                data_contact = self.xpath('//@data-contact')
+                if data_contact:
+                    data_contact=data_contact[0]
+                else:
+                    data_contact=''
+                data_secret = self.xpath('//@data-secr')
+                if data_secret:
+                    data_secret=data_secret[0]
+                else:
+                    data_secret = ''
+                ciphertext = b64decode(data_contact)
+                nc = ciphertext[:8]
+                data = ciphertext[8:]
+
+                keySize = 32
+                pwd = data_secret #from data-secr
+                key = kdf(pwd.encode('utf-8'), keySize) 
+                aes = AES.new(key=key, mode=AES.MODE_CTR, nonce=nc) 
+                res = aes.decrypt(data)
+                result = res.decode('utf-8')
+                #tel = result[0:13]
+                email = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', result)
+                if email:
+                    email = email[0]
+                else:
+                    email=''
+                phone_fax=re.findall(r"(\+\d\d\s*\d(?:\d)+)",result)
+                if phone_fax and len(phone_fax)==2:
+                    tel = phone_fax[0]
+                    fax = phone_fax[1]
+                elif phone_fax and len(phone_fax)==1:
+                    tel = phone_fax[0]
+                    fax = ''
+                else:
+                    tel = ''
+                    fax = ''
+                website = re.search('_blank">(.*)</a><br />', result)
+                if website:
+                    website = website.group(1)
+                else:
+                    website=''
+
+                return email, tel, fax, website
+
             def obj_email(self):
-                pass
+                email, tel, fax, website = self.get_decryption()
+                return email
             def obj_tel(self):
-                pass
+                email, tel, fax, website = self.get_decryption()
+                return tel
             def obj_fax(self):
-                pass
+                email, tel, fax, website = self.get_decryption()
+                return fax
             def obj_website(self):
-                pass
+                email, tel, fax, website = self.get_decryption()
+                return website
             def obj_sector(self):
-                pass
+                return self.xpath('//tr[6]/td/ul//text()')
 
