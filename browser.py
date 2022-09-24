@@ -5,6 +5,7 @@
 from monseigneur.core.browser import PagesBrowser, URL
 from .pages import MemberListPage, MemberPage, OfficeListPage, OfficePage
 import pandas as pd
+import re
 
 __all__ = ['SiaBrowser']
 
@@ -15,7 +16,7 @@ class SiaBrowser(PagesBrowser):
 
     memberlist_page= URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-individuels/nc/1/\?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<memberlist_page_no>\d+)", MemberListPage)
 
-    member_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-individuels/m/(?P<member_id>\d+)", MemberPage)
+    member_details_page = URL("https://www.sia.ch/(?P<language>\.+)/affiliation/liste-des-membres/membres-individuels/m/(?P<member_id>\d+)", MemberPage)
 
     office_list_page = URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-bureaux/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<office_list_page_no>\d+)", OfficeListPage)
 
@@ -31,17 +32,20 @@ class SiaBrowser(PagesBrowser):
         assert self.memberlist_page.is_here()
         return self.page.iter_members()
 
-    def iter_members_details(self, lang, member_id):
-        zip = self.page.get_zip()
-        lang= self.page.get_lang(zip)
-        self.member_page.go(lang=lang, member_id = member_id)
-        assert self.member_page.is_here()
-        return self.page.iter_members()
+    def members_details(self, language, url):
+        #zip = self.page.get_zip()
+        #lang= self.page.get_lang(zip)
+        member_id = re.findall(r'(\d+)', url)[0]
+        language = language.lower()
+        self.member_details_page.go(language=language, member_id = member_id)
+        print('Hello:', self.member_details_page)
+        assert self.member_details_page.is_here()
+        return self.page.members_details()
 
-    def iter_offices(self, office_list_page_no):
-        self.office_list_page.go(office_list_page_no=office_list_page_no)
+    def iter_offices(self, offices_list_page_no):
+        self.office_list_page.go(offices_list_page_no=offices_list_page_no)
         assert self.office_list_page.is_here()
-        return self.page.iter_members()
+        return self.page.iter_offices()
 
     def iter_offices_details(self, office_id):
         zip = self.page.get_zip()

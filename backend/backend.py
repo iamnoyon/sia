@@ -1,7 +1,7 @@
 from mbackend.core.fetcher import Fetcher
 from mbackend.core.application import Application
 from monseigneur.modules.public.sia.alchemy.dao_manager import DaoManager
-from monseigneur.modules.public.sia.alchemy.tables import Members
+from monseigneur.modules.public.sia.alchemy.tables import Members,Offices
 import time
 
 
@@ -26,9 +26,14 @@ class SiaBackend(Application):
         for memberlist_page_no in range(2):
             members = self.module.iter_members(memberlist_page_no=memberlist_page_no)
             for member in members:
-                print(member.__dict__)
-                #memberdetails = self.module.iter_members_details(lang=member.lang, member_id = member.member_id)
-                
+                #print(member.__dict__)
+                #print(member.url)
+                memberdetails = self.module.members_details(language=member.language, url=member.url)
+                #print(memberdetails.__dict__)
+        for offices_list_page_no in range(2):
+            offices = self.module.iter_offices(offices_list_page_no=offices_list_page_no)
+            for office in offices:
+                print(office.__dict__)
     
 
 if __name__ == '__main__':

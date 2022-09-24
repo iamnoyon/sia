@@ -4,7 +4,7 @@ from monseigneur.core.browser.elements import ItemElement, ListElement, method, 
 from monseigneur.core.browser.filters.html import Link, AbsoluteLink
 from monseigneur.core.browser.filters.json import Dict
 from monseigneur.core.browser.filters.standard import CleanText, Regexp, CleanDecimal, Currency, DateTime, Env, Field, Currency as CleanCurrency, CleanDate
-from monseigneur.modules.public.sia.alchemy.tables import Members
+from monseigneur.modules.public.sia.alchemy.tables import Members, Offices
 from Crypto.Cipher import AES
 from base64 import b64decode
 import re
@@ -75,25 +75,25 @@ class MemberPage(HTMLPage):
     class members_details(ItemElement):
         klass = Members
         def obj_full_address(self):
-            return self.el.xpath('//table//tr[2]/td/text()')
+            return self.xpath('//table//tr[2]/td/text()')
         def obj_gender(self):
-            return self.el.xpath('//table//tr[2]/td/font[1]/font/text()')[0]
+            return self.xpath('//table//tr[2]/td/font[1]/font/text()')[0]
         def obj_name(self):
-            return self.el.xpath('//table//tr[2]/td/font[2]/font/text()')[0]
+            return self.xpath('//table//tr[2]/td/font[2]/font/text()')[0]
         def obj_education(self):
-            return self.el.xpath('//table//tr[2]/td/font[3]/font/text()')
+            return self.xpath('//table//tr[2]/td/font[3]/font/text()')
         def obj_address(self):
-            return self.el.xpath('//table//tr[2]/td/font[4]/font/text()')[0]
+            return self.xpath('//table//tr[2]/td/font[4]/font/text()')[0]
         def obj_city(self):
-             return self.el.xpath('//table//tr[2]/td/font[5]/font/text()')[0]
+             return self.xpath('//table//tr[2]/td/font[5]/font/text()')[0]
 
         def get_decryption(self):
-            data_contact = self.el.xpath('//@data-contact')
+            data_contact = self.xpath('//@data-contact')
             if data_contact:
                 data_contact=data_contact[0]
             else:
                 data_contact=''
-            data_secret = self.el.xpath('//@data-secr')
+            data_secret = self.xpath('//@data-secr')
             if data_secret:
                 data_secret=data_secret[0]
             else:
@@ -146,22 +146,43 @@ class MemberPage(HTMLPage):
             return website
 
         def obj_job(self):
-            return self.el.xpath('//table//tr[6]/td[2]//text()')[0]
+            return self.xpath('//table//tr[6]/td[2]//text()')[0]
         def obj_sector(self):
-            return self.el.xpath('//table//tr[7]/td[2]//text()')[0]
+            return self.xpath('//table//tr[7]/td[2]//text()')[0]
         def obj_group(self):
-            return self.el.xpath('//table//tr[8]/td[2]//text()')[0]
+            return self.xpath('//table//tr[8]/td[2]//text()')[0]
         def obj_section(self):
-            return self.el.xpath('//table//tr[9]/td[2]//text()')[0]
+            return self.xpath('//table//tr[9]/td[2]//text()')[0]
         
 
 
 class OfficeListPage(HTMLPage):
-    class iter_offices(DictElement):
-        item_xpath = "data/ads"
-
+    @method
+    class iter_offices(ListElement):
+        item_xpath = '//table//tr[not(contains(@class,"header"))]'
         class get_offices(ItemElement):
-            klass = Members
+            klass = Offices
+            def obj_url(self):
+                #return self.page.url
+                #member_id = re.findall(r'(\d+)', indv_url)[0]
+                return 'https://www.sia.ch'+(self.xpath('./td[1]/a/@href')[0])
+            def obj_zipcode(self):
+                zip = self.xpath('./td[4]/text()')
+                if zip:
+                    return zip[0]
+                else:
+                    return
+
+            def obj_language(self):
+                #print(self.obj_zipcode())
+                if self.obj_zipcode():
+                    if (self.page.browser.df['ZIP_CODE'].eq(int(self.obj_zipcode()))).any():
+                        lang = self.page.browser.df.loc[self.page.browser.df['ZIP_CODE'] == int(self.obj_zipcode())].LANGUAGE.item() #get lang by comparing zip with excel
+                    else:
+                        lang = 'FR'
+                else:
+                    lang = 'FR'
+                return lang
 
 class OfficePage(HTMLPage):
     class iter_offices_details(DictElement):
