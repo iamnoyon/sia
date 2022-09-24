@@ -26,14 +26,17 @@ class SiaBackend(Application):
         for memberlist_page_no in range(2):
             members = self.module.iter_members(memberlist_page_no=memberlist_page_no)
             for member in members:
-                #print(member.__dict__)
+                print(member.__dict__)
+                
                 #print(member.url)
                 memberdetails = self.module.members_details(language=member.language, url=member.url)
-                #print(memberdetails.__dict__)
+                print(memberdetails.__dict__)
+        print('---------------------------------------------')
         for offices_list_page_no in range(2):
             offices = self.module.iter_offices(offices_list_page_no=offices_list_page_no)
             for office in offices:
                 print(office.__dict__)
+                offices_details = self.module.offices_details(language = office.language, url = member.url)
     
 
 if __name__ == '__main__':

@@ -18,9 +18,9 @@ class SiaBrowser(PagesBrowser):
 
     member_details_page = URL("https://www.sia.ch/(?P<language>\.+)/affiliation/liste-des-membres/membres-individuels/m/(?P<member_id>\d+)", MemberPage)
 
-    office_list_page = URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-bureaux/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<office_list_page_no>\d+)", OfficeListPage)
+    office_list_page = URL("https://www.sia.ch/fr/affiliation/liste-des-membres/membres-bureaux/nc/1/?tx_updsiafeuseradmin_pi1%5BdisplaySearchResult%5D=1&tx_updsiafeuseradmin_pi1%5Bpointer%5D=(?P<offices_list_page_no>\d+)", OfficeListPage)
 
-    office_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-bureaux/m/(?P<office_id>\d+)", OfficePage)
+    office_details_page = URL("https://www.sia.ch/(?P<lang>\.+)/affiliation/liste-des-membres/membres-bureaux/m/(?P<office_id>\d+)", OfficePage)
 
     def __init__(self, *args, **kwargs):
         zip_lang = 'zip_language.xlsx'
@@ -47,9 +47,10 @@ class SiaBrowser(PagesBrowser):
         assert self.office_list_page.is_here()
         return self.page.iter_offices()
 
-    def iter_offices_details(self, office_id):
-        zip = self.page.get_zip()
-        lang= self.page.get_lang(zip)
-        self.office_page.go(lang=lang, office_id=office_id)
-        assert self.office_page.is_here()
-        return self.page.iter_members()
+    def offices_details(self, language, url):
+        member_id = re.findall(r'(\d+)', url)[0]
+        language = language.lower()
+        self.office_details_page.go(language=language, member_id = member_id)
+        print('Hello:', self.office_details_page)
+        assert self.office_details_page.is_here()
+        return self.page.offices_details()
