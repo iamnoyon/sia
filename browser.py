@@ -32,15 +32,15 @@ class SiaBrowser(PagesBrowser):
         assert self.memberlist_page.is_here()
         return self.page.iter_members()
 
-    def members_details(self, language, url):
+    def members_details(self, member):
         #zip = self.page.get_zip()
         #lang= self.page.get_lang(zip)
-        member_id = re.findall(r'(\d+)', url)[0]
-        language = language.lower()
+        member_id = re.findall(r'(\d+)', member.url)[0]
+        language = member.language.lower()
         self.member_details_page.go(language=language, member_id = member_id)
         #print('Hello:', self.member_details_page)
         assert self.member_details_page.is_here()
-        return self.page.get_members_details(self.page)
+        return self.page.get_members_details(obj=member)
 
     def iter_offices(self, offices_list_page_no):
         self.office_list_page.go(offices_list_page_no=offices_list_page_no)
@@ -53,4 +53,4 @@ class SiaBrowser(PagesBrowser):
         self.office_details_page.go(language=language, office_id = office_id)
         #print('Hello:', self.office_details_page)
         assert self.office_details_page.is_here()
-        return self.page.get_offices_details(self.page)
+        return self.page.get_offices_details()
