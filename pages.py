@@ -87,19 +87,19 @@ class MemberPage(HTMLPage):
             return clean_list(self.xpath('//table//tr[2]/td/text()'))
         def obj_gender(self):
             #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[0])
-            return clean_list(self.xpath('//table//tr[2]/td/text()')[0])
+            return clean_list(self.xpath('//table//tr[2]/td/text()'))[0]
         def obj_name(self):
             #print('Name:', clean_list(self.xpath('//table//tr[2]/td/text()'))[1])
-            return clean_list(self.xpath('//table//tr[2]/td/text()')[1])
+            return clean_list(self.xpath('//table//tr[2]/td/text()'))[1]
         def obj_education(self):
             #print('Education:', clean_list(self.xpath('//table//tr[2]/td/text()'))[2])
-            return clean_list(self.xpath('//table//tr[2]/td/text()')[2])
+            return clean_list(self.xpath('//table//tr[2]/td/text()'))[2]
         def obj_address(self):
             #print('Address:', clean_list(self.xpath('//table//tr[2]/td/text()'))[3])
-            return clean_list(self.xpath('//table//tr[2]/td/text()')[3])
+            return clean_list(self.xpath('//table//tr[2]/td/text()'))[3]
         def obj_city(self):
             #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[4])
-            return clean_list(self.xpath('//table//tr[2]/td/text()')[4])
+            return clean_list(self.xpath('//table//tr[2]/td/text()'))[4]
 
         def get_decryption(self):
             data_contact = self.xpath('//@data-contact')
