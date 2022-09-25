@@ -38,6 +38,7 @@ class SiaBrowser(PagesBrowser):
         member_id = re.findall(r'(\d+)', member.url)[0]
         language = member.language.lower()
         self.member_details_page.go(language=language, member_id = member_id)
+        member.url = self.url
         #print('Hello:', self.member_details_page)
         assert self.member_details_page.is_here()
         return self.page.get_members_details(obj=member)
