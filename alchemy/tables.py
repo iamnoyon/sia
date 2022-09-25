@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.dialects.mysql import MEDIUMTEXT, VARCHAR, BOOLEAN, DATETIME, LONGTEXT, INTEGER
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -30,7 +31,8 @@ class Members(Base):
     sector = Column(MEDIUMTEXT)
     group = Column(MEDIUMTEXT)
     section = Column(MEDIUMTEXT)
-    #child = relationship("Child", back_populates="parents")
+    #memberoffices = relationship("MemberOffice", back_populates="child")
+
 
 class Offices(Base):
     __tablename__ = 'office'
@@ -51,18 +53,20 @@ class Offices(Base):
     fax = Column(MEDIUMTEXT)
     website = Column(MEDIUMTEXT)
     sector = Column(MEDIUMTEXT)
-    #child = relationship("Child", back_populates="parents")
+    #children = relationship("MemberOffice", back_populates="parent")
+    #memberoffices = relationship("MemberOffice", back_populates="child")
 
 class MemberOffice(Base):
-
     __tablename__ = 'memberoffice'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    member_id = Column(INTEGER, unique=True, nullable=True)
-    officeid = Column(INTEGER, unique=True, nullable=True)
+    member_id = Column(INTEGER, ForeignKey("member.id"))
+    #member_id = Column(INTEGER, unique=True, nullable=True)
+    office_id = Column(INTEGER, ForeignKey("office.id"))
     created_date = Column(DATETIME)
-    #child = relationship("Child", backref="parents")
+    #child = relationship("Members", back_populates="memberoffices")
+
 def create_all(engine):
     print("creating databases")
     Base.metadata.create_all(engine)
