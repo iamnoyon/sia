@@ -240,13 +240,43 @@ class OfficePage(HTMLPage):
     class get_offices_details(ItemElement):
         klass = Offices
         def obj_full_address(self):
-            return self.xpath('//table//tr[2]/td/text()')
+            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            while(len(full_address)<4):
+                        full_address.append('')
+            full_address_str = " ".join(full_address)
+            return full_address_str
+            #return self.xpath('//table//tr[2]/td/text()')
         def obj_name(self):
-            return self.xpath('//table//tr[2]/td[1]/text()')[1]
+            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            if len(full_address)>1:
+                return full_address[0]
+            else:
+                return
+            #return self.xpath('//table//tr[2]/td[1]/text()')[1]
         def obj_address(self):
-            return self.xpath('//table//tr[2]/td[1]/text()')[2]
+            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            if len(full_address)>1:
+                if(len(full_address)<4):
+                    while(len(full_address)<4):
+                        full_address.append('')
+                    return full_address[1]
+                else:
+                    return full_address[2]
+            else:
+                return
+            #return self.xpath('//table//tr[2]/td[1]/text()')[2]
         def obj_city(self):
-            return self.xpath('//table//tr[2]/td[1]/text()')[3]
+            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            if len(full_address)>1:
+                if(len(full_address)<4):
+                    while(len(full_address)<4):
+                        full_address.append('')
+                    return full_address[2]
+                else:
+                    return full_address[3]
+            else:
+                return
+            #return self.xpath('//table//tr[2]/td[1]/text()')[3]
 
         def get_decryption(self):
             data_contact = self.xpath('//@data-contact')
@@ -306,5 +336,11 @@ class OfficePage(HTMLPage):
             email, tel, fax, website = self.get_decryption()
             return website
         def obj_sector(self):
-            return self.xpath('//tr[6]/td/ul//text()')
+            sector = self.xpath('//tr[6]/td/ul//text()')
+            if sector:
+                sector = clean_list(sector)
+                sector_str = ", ".join(sector)
+                return sector_str
+            else:
+                return
 

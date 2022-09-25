@@ -48,10 +48,11 @@ class SiaBrowser(PagesBrowser):
         assert self.office_list_page.is_here()
         return self.page.iter_offices()
 
-    def offices_details(self, language, url):
-        office_id = re.findall(r'(\d+)', url)[0]
-        language = language.lower()
+    def offices_details(self, office):
+        office_id = re.findall(r'(\d+)', office.url)[0]
+        language = office.language.lower()
         self.office_details_page.go(language=language, office_id = office_id)
+        office.url = self.url
         #print('Hello:', self.office_details_page)
         assert self.office_details_page.is_here()
-        return self.page.get_offices_details()
+        return self.page.get_offices_details(obj=office)
