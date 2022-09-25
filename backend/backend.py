@@ -23,7 +23,7 @@ class SiaBackend(Application):
         self.session, self.scoped_session = self.dao.get_shared_session()
 
     def main(self):
-        for memberlist_page_no in range(1):
+        for memberlist_page_no in range(0):
             members = self.module.iter_members(memberlist_page_no=memberlist_page_no)
             for member in members:
                 #print(member.__dict__)
@@ -35,17 +35,16 @@ class SiaBackend(Application):
                     self.session.commit()
 
         print('---------------------------------------------')
-        for offices_list_page_no in range(1):
+        for offices_list_page_no in range(21):
             offices = self.module.iter_offices(offices_list_page_no=offices_list_page_no)
             for office in offices:
                 #print(office.__dict__)
-                offices_details = self.module.offices_details(office=office)
-                print(offices_details.__dict__)
+                officesdetails = self.module.offices_details(office=office)
+                print(officesdetails.__dict__)
                 if not self.session.query(Offices).filter(Offices.office_id == office.office_id).count():
                     self.session.add(office)
                     self.session.commit()
-
-        print('-------------------------------------------------------------')
+        print('---------------------------------------------')
     
 
 if __name__ == '__main__':
