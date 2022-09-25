@@ -35,6 +35,11 @@ class MemberListPage(HTMLPage):
         item_xpath = '//table//tr[not(contains(@class,"header"))]'
         class get_members(ItemElement):
             klass = Members
+            def obj_member_id(self):
+                #return self.page.url
+                #member_id = re.findall(r'(\d+)', indv_url)[0]
+                url = 'https://www.sia.ch'+(self.xpath('./td[1]/a/@href')[0])
+                return re.findall(r'(\d+)', url)[0]
             def obj_url(self):
                 #return self.page.url
                 #member_id = re.findall(r'(\d+)', indv_url)[0]
@@ -213,6 +218,11 @@ class OfficeListPage(HTMLPage):
         item_xpath = '//table//tr[not(contains(@class,"header"))]'
         class get_offices(ItemElement):
             klass = Offices
+            def obj_office_id(self):
+                #return self.page.url
+                #member_id = re.findall(r'(\d+)', indv_url)[0]
+                url = 'https://www.sia.ch'+(self.xpath('./td[1]/a/@href')[0])
+                return re.findall(r'(\d+)', url)[0]
             def obj_url(self):
                 #return self.page.url
                 #member_id = re.findall(r'(\d+)', indv_url)[0]
@@ -240,21 +250,21 @@ class OfficePage(HTMLPage):
     class get_offices_details(ItemElement):
         klass = Offices
         def obj_full_address(self):
-            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            full_address = clean_list(self.xpath('//div/table//tr[2]/td/text()'))
             while(len(full_address)<4):
                         full_address.append('')
             full_address_str = " ".join(full_address)
             return full_address_str
             #return self.xpath('//table//tr[2]/td/text()')
         def obj_name(self):
-            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            full_address = clean_list(self.xpath('//div/table//tr[2]/td/text()'))
             if len(full_address)>1:
                 return full_address[0]
             else:
                 return
             #return self.xpath('//table//tr[2]/td[1]/text()')[1]
         def obj_address(self):
-            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            full_address = clean_list(self.xpath('//div/table//tr[2]/td/text()'))
             if len(full_address)>1:
                 if(len(full_address)<4):
                     while(len(full_address)<4):
@@ -266,7 +276,7 @@ class OfficePage(HTMLPage):
                 return
             #return self.xpath('//table//tr[2]/td[1]/text()')[2]
         def obj_city(self):
-            full_address = clean_list(self.xpath('//div/table/tr[2]/td/text()'))
+            full_address = clean_list(self.xpath('//div/table//tr[2]/td/text()'))
             if len(full_address)>1:
                 if(len(full_address)<4):
                     while(len(full_address)<4):

@@ -12,7 +12,7 @@ class Members(Base):
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    #member_id = Column(Integer, ForeignKey("memberoffice.member_id"))
+    member_id = Column(INTEGER, unique=True, nullable=False)
     #internal_id = Column(INTEGER, unique=True, nullable=False)
     url = Column(VARCHAR(350))
     language = Column(VARCHAR(2))
@@ -39,7 +39,7 @@ class Offices(Base):
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
-    #office_id = Column(Integer, ForeignKey("memberoffice.officeid"))
+    office_id = Column(INTEGER, unique=True, nullable=False)
     #internal_id = Column(INTEGER, unique=True, nullable=False)
     url = Column(VARCHAR(350))
     language = Column(VARCHAR(2))
