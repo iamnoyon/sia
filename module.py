@@ -22,3 +22,5 @@ class SiaModule(Module):
         return self.browser.iter_offices(offices_list_page_no)
     def offices_details(self, office):
         return self.browser.offices_details(office)
+    def get_member_list(self):
+        return self.browser.get_member_list()

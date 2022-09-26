@@ -44,6 +44,13 @@ class SiaBackend(Application):
                 if not self.session.query(Offices).filter(Offices.office_id == office.office_id).count():
                     self.session.add(office)
                     self.session.commit()
+
+                office_database_id = office.office_id
+                members_of_office = self.module.get_member_list()
+                for member_of_office in members_of_office:
+                    member_database_id = self.session.query(Members).filter(Members.member_id==member_of_office)
+                    off
+
         print('---------------------------------------------')
     
 

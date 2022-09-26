@@ -246,6 +246,13 @@ class OfficeListPage(HTMLPage):
                 return lang
 
 class OfficePage(HTMLPage):
+    def get_member_list(self):
+            joined_members_url = self.doc.xpath('//*[contains(text(),"SIA")]//ancestor::tr/following-sibling::tr[1]//a/@href')
+            if joined_members_url:
+                joined_members_id = re.findall(r'\/(\d+)\/',joined_members_url[0])
+                return joined_members_id
+            else:
+                return
     @method
     class get_offices_details(ItemElement):
         klass = Offices
