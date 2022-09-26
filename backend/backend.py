@@ -35,7 +35,7 @@ class SiaBackend(Application):
                     self.session.commit()
 
         print('---------------------------------------------')
-        for offices_list_page_no in range(1):
+        for offices_list_page_no in range(20):
             offices = self.module.iter_offices(offices_list_page_no=offices_list_page_no)
             for office in offices:
                 #print(office.__dict__)
@@ -48,11 +48,15 @@ class SiaBackend(Application):
                 office_database_id = office.id
                 members_of_office = self.module.get_member_list()
                 for member_of_office in members_of_office:
-                    member_database_id = self.session.query(Members).filter(Members.member_id==member_of_office).id
-                    member_office = MemberOffice(member_id = member_database_id, office_id = office_database_id)
-                    self.session.add(member_office)
-                    self.session.commit()
-
+                    member_db_row = self.session.query(Members).filter(Members.member_id==member_of_office).first()
+                    if member_db_row:
+                        print(member_of_office)
+                        member_database_id = member_db_row.id
+                        member_office = MemberOffice(member_id = member_database_id, office_id = office_database_id)
+                        self.session.add(member_office)
+                        self.session.commit()
+                    else:
+                        print('Member does not exist')
         print('---------------------------------------------')
     
 
