@@ -58,6 +58,7 @@ class SiaBrowser(PagesBrowser):
         #print('Hello:', self.office_details_page)
         assert self.office_details_page.is_here()
         return self.page.get_offices_details(obj=office)
-        
+
     def get_member_list(self):
+        assert self.office_details_page.is_here()
         return self.page.get_member_list()
