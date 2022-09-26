@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, func
 from sqlalchemy.dialects.mysql import MEDIUMTEXT, VARCHAR, BOOLEAN, DATETIME, LONGTEXT, INTEGER
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 Base = declarative_base()
 
@@ -60,11 +61,11 @@ class MemberOffice(Base):
     __tablename__ = 'memberoffice'
     __table_args__ = {'mysql_charset': 'utf8mb4', 'mysql_collate': 'utf8mb4_bin'}
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    id = Column(INTEGER, primary_key=True, autoincrement=True, nullable=False)
     member_id = Column(INTEGER, ForeignKey("member.id"))
     #member_id = Column(INTEGER, unique=True, nullable=True)
     office_id = Column(INTEGER, ForeignKey("office.id"))
-    created_date = Column(DATETIME)
+    created_date = Column(DateTime, default=datetime.now)
     #child = relationship("Members", back_populates="memberoffices")
 
 def create_all(engine):
