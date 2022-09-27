@@ -6,6 +6,7 @@ from monseigneur.core.browser import PagesBrowser, URL
 from .pages import MemberListPage, MemberPage, OfficeListPage, OfficePage
 import pandas as pd
 import re
+import time
 
 __all__ = ['SiaBrowser']
 
@@ -28,6 +29,7 @@ class SiaBrowser(PagesBrowser):
         super(SiaBrowser, self).__init__(*args, **kwargs)
 
     def iter_members(self, memberlist_page_no):
+        #time.sleep(1)
         self.memberlist_page.go(memberlist_page_no=memberlist_page_no)
         assert self.memberlist_page.is_here()
         return self.page.iter_members()
@@ -38,6 +40,7 @@ class SiaBrowser(PagesBrowser):
         #member_id = re.findall(r'(\d+)', member.url)[0]
         member_id = member.member_id
         language = member.language.lower()
+        #time.sleep(1)
         self.member_details_page.go(language=language, member_id = member_id)
         member.url = self.url
         #print('Hello:', self.member_details_page)
@@ -45,6 +48,7 @@ class SiaBrowser(PagesBrowser):
         return self.page.get_members_details(obj=member)
 
     def iter_offices(self, officelist_page_no):
+        #time.sleep(1)
         self.officelist_page.go(officelist_page_no=officelist_page_no)
         assert self.officelist_page.is_here()
         return self.page.iter_offices()
@@ -53,6 +57,7 @@ class SiaBrowser(PagesBrowser):
         #office_id = re.findall(r'(\d+)', office.url)[0]
         office_id = office.office_id
         language = office.language.lower()
+        #time.sleep(1)
         self.office_details_page.go(language=language, office_id = office_id)
         office.url = self.url
         #print('Hello:', self.office_details_page)

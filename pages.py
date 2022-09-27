@@ -50,6 +50,12 @@ class MemberListPage(HTMLPage):
                     return zip[0]
                 else:
                     return
+            def obj_city(self):
+                city = self.xpath('./td[5]/text()')
+                if city:
+                    return city[0]
+                else:
+                    return
 
             def obj_language(self):
                 #print(self.obj_zipcode())
@@ -90,40 +96,65 @@ class MemberPage(HTMLPage):
         def obj_full_address(self):
             #print('Full address:', clean_list(self.xpath('//table//tr[2]/td/text()')))
             full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
-            while(len(full_address)<5):
+            while(len(full_address)<6):
                         full_address.append('')
             full_address_str = " ".join(full_address)
             return full_address_str
         def obj_gender(self):
             #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[0])
             full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
-            while(len(full_address)<5):
+            while(len(full_address)<6):
                         full_address.append('')
             return full_address[0]
         def obj_name(self):
             #print('Name:', clean_list(self.xpath('//table//tr[2]/td/text()'))[1])
             full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
-            while(len(full_address)<5):
+            while(len(full_address)<6):
                         full_address.append('')
-            return full_address[1]
+            if 'Dr.' in full_address[1] or 'Prof.' in full_address[1]:
+                #print('Nameeeeee:', full_address[1])
+                return full_address[1]+" "+full_address[2]
+            else:
+                return full_address[1]
         def obj_education(self):
             #print('Education:', clean_list(self.xpath('//table//tr[2]/td/text()'))[2])
             full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
-            while(len(full_address)<5):
+            while(len(full_address)<6):
                         full_address.append('')
-            return full_address[2]
+            if 'Dr.' in full_address[1] or 'Prof.' in full_address[1]:
+                return full_address[3]
+            else:
+                return full_address[2]
         def obj_address(self):
             #print('Address:', clean_list(self.xpath('//table//tr[2]/td/text()'))[3])
             full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
-            while(len(full_address)<5):
+            while(len(full_address)<6):
                         full_address.append('')
-            return full_address[3]
-        def obj_city(self):
+            if 'Dr.' in full_address[1] or 'Prof.' in full_address[1]:
+                return full_address[4]
+            else:
+                return full_address[3]
+        '''def obj_city(self):
             #print('Gender:', clean_list(self.xpath('//table//tr[2]/td/text()'))[4])
             full_address = clean_list(self.xpath('//table//tr[2]/td/text()'))
-            while(len(full_address)<5):
+            while(len(full_address)<6):
                         full_address.append('')
-            return full_address[4]
+            if 'Dr.' in full_address[1] or 'Prof.' in full_address[1]:
+                #return full_address[5]
+                cityzip  = full_address[5][:4]
+                if(cityzip.isnumeric()):
+                    city = full_address[5].replace(cityzip,"")
+                    return city
+                else:
+                    return full_address[5]
+            else:
+                #return full_address[4]
+                cityzip  = full_address[4][:4]
+                if(cityzip.isnumeric()):
+                    city = full_address[4].replace(cityzip,"")
+                    return city
+                else:
+                    return full_address[4]'''
 
         def get_decryption(self):
             data_contact = self.xpath('//@data-contact')
@@ -233,6 +264,12 @@ class OfficeListPage(HTMLPage):
                     return zip[0]
                 else:
                     return
+            def obj_city(self):
+                city = self.xpath('./td[5]/text()')
+                if city:
+                    return city[0]
+                else:
+                    return
 
             def obj_language(self):
                 #print(self.obj_zipcode())
@@ -282,7 +319,7 @@ class OfficePage(HTMLPage):
             else:
                 return
             #return self.xpath('//table//tr[2]/td[1]/text()')[2]
-        def obj_city(self):
+        '''def obj_city(self):
             full_address = clean_list(self.xpath('//div/table//tr[2]/td/text()'))
             if len(full_address)>1:
                 if(len(full_address)<4):
@@ -292,7 +329,7 @@ class OfficePage(HTMLPage):
                 else:
                     return full_address[3]
             else:
-                return
+                return'''
             #return self.xpath('//table//tr[2]/td[1]/text()')[3]
 
         def get_decryption(self):
